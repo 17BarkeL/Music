@@ -9,6 +9,7 @@ namespace Music
 {
     public class Music
     {
+        // ([A-G])(\d) (\d)
         private List<Note> notes = new List<Note>();
         private string fileName;
 
@@ -20,8 +21,12 @@ namespace Music
 
         public void Play()
         {
-            string musicData = File.ReadAllText($"{Directory.GetCurrentDirectory()}../../../{fileName}");
-            Console.WriteLine(musicData);
+            string[] musicData = File.ReadAllLines(fileName);
+
+            foreach (string line in musicData)
+            {
+                Console.WriteLine();
+            }
 
             foreach (Note note in notes)
             {
