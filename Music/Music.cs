@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace Music
@@ -25,7 +26,7 @@ namespace Music
 
             foreach (string line in musicData)
             {
-                Console.WriteLine();
+                Console.WriteLine(splitLine[0]);
             }
 
             foreach (Note note in notes)
