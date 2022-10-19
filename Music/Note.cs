@@ -10,5 +10,6 @@ namespace Music
     {
         private int volume;
         private int duration;
+        public int noteNumber;
     }
 }
