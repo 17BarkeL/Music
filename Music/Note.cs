@@ -9,7 +9,6 @@ namespace Music
     public class Note : MusicalNotation
     {
         private int volume;
-        private int duration;
         public int noteNumber;
     }
 }

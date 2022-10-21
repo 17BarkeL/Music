@@ -10,7 +10,7 @@ namespace Music
 {
     public class Music
     {
-        private List<Note> notes = new List<Note>();
+        private List<MusicalNotation> notes = new List<MusicalNotation>();
         private string fileName;
 
         public Music(string fileName)
@@ -22,34 +22,50 @@ namespace Music
 
             int octave = 4;
 
-            foreach (Match match in Regex.Matches(musicContents, @"([A-G])([b#])*(\d)*(:(\d))*"))
+            foreach (Match match in Regex.Matches(musicContents, @"([A-G])*([b#])*(\d)*(:(\d))*"))
             {
                 // Get note
                 string note = match.Groups[1].Value;
 
-                // Get octave
-                if (match.Groups[3].Value.Length > 0)
+                // Is it a note or a rest
+                if (note.Length > 0)
                 {
-                    octave = int.Parse(match.Groups[3].Value);
-                }
-                
-                // Get flat or sharp
-                bool flat = match.Groups[2].Value == "b";
-                bool sharp = match.Groups[2].Value == "#";
-                
-                int duration = 1;
+                    // Get octave
+                    if (match.Groups[3].Value.Length > 0)
+                    {
+                        octave = int.Parse(match.Groups[3].Value);
+                    }
 
-                if (match.Groups[5].Value.Length > 0)
+                    // Get flat or sharp
+                    bool flat = match.Groups[2].Value == "b";
+                    bool sharp = match.Groups[2].Value == "#";
+
+                    
+
+                    Note newNote = new Note();
+
+                    newNote.duration = 1;
+
+                    if (match.Groups[5].Value.Length > 0)
+                    {
+                        newNote.duration = int.Parse(match.Groups[5].Value);
+                    }
+
+                    newNote.noteNumber = NoteToNumber(note[0], flat, sharp, octave);
+                    notes.Add(newNote);
+                }
+
+                else
                 {
-                    duration = int.Parse(match.Groups[5].Value);
+                    Rest newRest = new Rest();
+                    newRest.duration = 1;
+
+                    if (match.Groups[5].Value.Length > 0)
+                    {
+                        newRest.duration = int.Parse(match.Groups[5].Value);
+                        notes.Add(newRest);
+                    }
                 }
-
-                Note newNote = new Note();
-                newNote.noteNumber = NoteToNumber(Char.Parse(note), flat, sharp, octave);
-
-                notes.Add(newNote);
-
-                Console.WriteLine($"Note: {note}, Octave: {octave}, Duration: {duration}");
             }
         }
 
@@ -57,10 +73,20 @@ namespace Music
         {
             Console.WriteLine("Playing...");
 
-            foreach (Note note in notes)
+            foreach (MusicalNotation notation in notes)
             {
-                note.Play();
-                Console.WriteLine($"Playing note: {note}");
+                notation.Play();
+
+                if (notation.GetType().Name == "Note")
+                {
+                    Note note = (Note)notation;
+                    Console.WriteLine($"Playing note: {note.noteNumber} for {note.duration}");
+                }
+
+                else
+                {
+                    Console.WriteLine($"Resting for {notation.duration} beats");
+                }
             }
         }
 
