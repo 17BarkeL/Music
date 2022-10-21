@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Music
 {
-    public class ProgramChange : MidiEvent
+    public class ProgramChange
     {
         private int instrument;
     }
